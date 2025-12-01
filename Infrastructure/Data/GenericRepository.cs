@@ -61,6 +61,14 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
     {
         return await ApplySpecification(spec).ToListAsync();// we dont need to specify the type here cuz when we send the spec it's gonna have the (T,TResult) it's gonna implicitly apply it
     }
+    public async Task<int> CountAsync(ISpecification<T> spec)// when we use the pagination we make 2 reqs one to get list of products and one to get the count of em
+    {
+        var query = context.Set<T>().AsQueryable();
+
+        query = spec.ApplyCriteria(query);
+
+        return await query.CountAsync();
+    }
     private IQueryable<T> ApplySpecification(ISpecification<T> spec)
     {
         return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), spec);
