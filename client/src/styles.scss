@@ -42,6 +42,10 @@ $customTheme: mat.define-theme();
   height: var(--mat-form-field-container-height) !important;
 }
 
+.mdc-notched-outline__notch{
+  border-right-style:none !important;
+}
+
 body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the

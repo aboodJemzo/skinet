@@ -15,7 +15,6 @@ import { CdkObserveContent } from "@angular/cdk/observers";
     MatListOption,
     MatButton,
     FormsModule,
-    CdkObserveContent
 ],
   templateUrl: './filters-dialog.html',
   styleUrl: './filters-dialog.scss',

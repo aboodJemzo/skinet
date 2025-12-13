@@ -9,7 +9,7 @@ import { Shop as Shop } from "./features/shop/shop";
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Shop],
+  imports: [Header, Shop, RouterOutlet,RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
