@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import{MatIcon} from '@angular/material/icon';
 import{MatButton} from '@angular/material/button';
 import{MatBadge} from '@angular/material/badge'
+import{MatProgressBar} from '@angular/material/progress-bar'
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Busy } from '../../core/services/busy';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +13,18 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
     MatButton,
     MatBadge,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    MatProgressBar
 ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
-
+  busyService = inject(Busy)
+  constructor() {
+    // 🔴 THIS IS THE MAGIC LINE
+    effect(() => {
+      this.busyService.loading();
+    });
+  }
 }

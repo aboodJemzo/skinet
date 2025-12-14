@@ -14,7 +14,6 @@ import { ShopParams } from '../../shared/models/shopParams';
 import { Pagination } from '../../shared/models/pagination';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CdkAriaLive } from "../../../../node_modules/@angular/cdk/types/_a11y-module-chunk";
 
 @Component({
   selector: 'app-shop',
