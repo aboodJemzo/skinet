@@ -1,4 +1,5 @@
 using API.Middleware;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
@@ -24,13 +25,19 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
     return ConnectionMultiplexer.Connect(configuration);
 });
 builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<StoreContext>();
+
 
 var app = builder.Build();
+app.MapGroup("api").MapIdentityApi<AppUser>(); // now if we need to access anything now we have to add before it "api" like "api/login"
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionMiddleware>(); // this needs to live at the top of our Http request pipeline 
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials()//"AllowCredentials()" this method allow us to send up a cookie from a client 
+                                                                       //on a different domain to enable this functionality to work when we do authenticate with our client
+.WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
 app.MapControllers();
 
