@@ -3,9 +3,12 @@ import{MatIcon} from '@angular/material/icon';
 import{MatButton} from '@angular/material/button';
 import{MatBadge} from '@angular/material/badge'
 import{MatProgressBar} from '@angular/material/progress-bar'
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { Busy } from '../../core/services/busy';
 import { CartService } from '../../core/services/cart';
+import { AccountService } from '../../core/services/account-service';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +18,11 @@ import { CartService } from '../../core/services/cart';
     MatBadge,
     RouterLink,
     RouterLinkActive,
-    MatProgressBar
+    MatProgressBar,
+    MatMenu,
+    MatMenuTrigger,
+    MatDivider,
+    MatMenuItem
 ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
@@ -23,6 +30,18 @@ import { CartService } from '../../core/services/cart';
 export class Header {
   busyService = inject(Busy)
   cartService = inject(CartService);
+  accountservie = inject(AccountService);
+  private router = inject(Router)
+
+  logout(){
+    this.accountservie.logout().subscribe({
+      next :() =>{
+        this.accountservie.currentUser.set(null);
+        this.router.navigateByUrl('/');
+      }
+    })
+  }
+
   constructor() {
     // 🔴 THIS IS THE MAGIC LINE
     effect(() => {
