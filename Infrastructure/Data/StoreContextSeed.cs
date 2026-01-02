@@ -21,5 +21,19 @@ public class StoreContextSeed
 
             await context.SaveChangesAsync();
         }
+
+        if (!context.DeliveryMethods.Any())
+        {
+            var dmData = await File.ReadAllTextAsync("../Infrastructure/Data/SeedData/delivery.json");// to read for the file
+
+            var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);// to convert from json to the type we want
+
+            if (methods == null)
+                return;
+
+            context.DeliveryMethods.AddRange(methods); // here we used this method to add a punch of products at once
+
+            await context.SaveChangesAsync();
+        }
     }
 }
