@@ -33,10 +33,10 @@ public class GenericRepository<T>(StoreContext context) : IGenericRepository<T> 
         return await context.Set<T>().ToListAsync();
     }
 
-    public async Task<bool> SaveAllAsync()
-    {
-        return await context.SaveChangesAsync() > 0;
-    }
+    // public async Task<bool> SaveAllAsync()  we removed this method to UnitOfWork and because we want our transactions to be handled there
+    // {
+    //     return await context.SaveChangesAsync() > 0;
+    // }
 
     public void Update(T entity)
     {

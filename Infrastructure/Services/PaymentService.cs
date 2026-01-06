@@ -7,7 +7,7 @@ using Stripe;
 namespace Infrastructure.Services;
 
 public class PaymentService(IConfiguration config, ICartService cartService,
-IGenericRepository<Core.Entities.Product> productRepo, IGenericRepository<DeliveryMethod> dmRepo) : IPaymentService
+IUnitOfWork unit) : IPaymentService // we replaced IGenericRepository<Product> productRepo and IGenericRepository<DeliveryMethod> dmRepo with IUnitOfWork unit
 {
     public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId)
     {
@@ -21,7 +21,7 @@ IGenericRepository<Core.Entities.Product> productRepo, IGenericRepository<Delive
 
         if (cart.DeliveryMethodId.HasValue) // cuz we made it optional we have the access to the HasValue method
         {
-            var deliveryMethod = await dmRepo.GetByIdAsync((int)cart.DeliveryMethodId);
+            var deliveryMethod = await unit.Repository<DeliveryMethod>().GetByIdAsync((int)cart.DeliveryMethodId);
 
             if (deliveryMethod == null) return null;
 
@@ -30,7 +30,7 @@ IGenericRepository<Core.Entities.Product> productRepo, IGenericRepository<Delive
 
         foreach (var item in cart.Items)
         {
-            var productItem = await productRepo.GetByIdAsync(item.ProductId);
+            var productItem = await unit.Repository<Core.Entities.Product>().GetByIdAsync(item.ProductId);
 
             if (productItem == null) return null;
 

@@ -1,6 +1,7 @@
 using System;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
@@ -28,6 +29,10 @@ public class SpecificationEvaluator<T> where T : BaseEntity // here we say the T
         {
             query = query.Skip(spec.Skip).Take(spec.Take);
         }
+
+        query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));// we use Aggregate to apply all includes one by one and because we can have multiple includes
+        query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));// this is for thenInclude
+        // we added these to the first GetQuery method to handle includes and cuz in the second one we use the Select so we dont need to handle includes there (the projection will handle that)
         return query;
     }
     public static IQueryable<TResult> GetQuery<TSpec, TResult>(IQueryable<T> query, ISpecification<T, TResult> spec)

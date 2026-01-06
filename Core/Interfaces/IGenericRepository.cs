@@ -14,7 +14,8 @@ public interface IGenericRepository<T> where T : BaseEntity
     void Add(T entity);
     void Update(T entity);
     void Remove(T entity);
-    Task<bool> SaveAllAsync();
+
+    //Task<bool> SaveAllAsync(); we removed this method to UnitOfWork and because we want our transactions to be handled there
     bool Exists(int id);
     Task<int> CountAsync(ISpecification<T> spec);
 }
